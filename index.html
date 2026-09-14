@@ -1,0 +1,512 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>LAX Weather</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      min-height: 100%;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #07111f;
+      color: white;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: clamp(32px, 6vw, 64px);
+    }
+
+    .header p {
+      margin: 8px 0 0;
+      color: #aab8ca;
+      font-size: 18px;
+    }
+
+    .location-card {
+      background: #101c2c;
+      border: 1px solid #243752;
+      border-radius: 22px;
+      padding: 25px;
+      margin-bottom: 20px;
+    }
+
+    .pin-area {
+      position: relative;
+      height: 300px;
+      border-radius: 18px;
+      overflow: hidden;
+      background:
+        linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px),
+        #0c1726;
+      background-size: 40px 40px;
+      border: 1px solid #29405d;
+    }
+
+    .pin-center {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    .pin {
+      width: 30px;
+      height: 30px;
+      margin: auto;
+      border-radius: 50% 50% 50% 0;
+      background: #ff3b30;
+      transform: rotate(-45deg);
+      box-shadow: 0 0 25px rgba(255, 59, 48, 0.65);
+    }
+
+    .pin-dot {
+      width: 10px;
+      height: 10px;
+      background: white;
+      border-radius: 50%;
+      position: absolute;
+      left: 50%;
+      top: 10px;
+      transform: translateX(-50%);
+    }
+
+    .pin-label {
+      margin-top: 18px;
+      font-weight: bold;
+      font-size: 22px;
+    }
+
+    .coordinates {
+      margin-top: 7px;
+      color: #9eb0c8;
+      font-size: 14px;
+    }
+
+    .weather-main {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 20px;
+    }
+
+    .current {
+      background: #101c2c;
+      border: 1px solid #243752;
+      border-radius: 22px;
+      padding: 25px;
+    }
+
+    .temperature {
+      font-size: clamp(55px, 10vw, 100px);
+      font-weight: bold;
+      line-height: 1;
+    }
+
+    .condition {
+      margin-top: 12px;
+      font-size: 24px;
+      color: #d9e4f2;
+    }
+
+    .updated {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #8498b0;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .stat {
+      background: #101c2c;
+      border: 1px solid #243752;
+      border-radius: 18px;
+      padding: 20px;
+      min-height: 120px;
+    }
+
+    .stat-title {
+      color: #91a4bb;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+    .airport-info {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .info-box {
+      background: #101c2c;
+      border: 1px solid #243752;
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .info-box strong {
+      display: block;
+      font-size: 20px;
+      margin-bottom: 5px;
+    }
+
+    .info-box span {
+      color: #91a4bb;
+      font-size: 13px;
+    }
+
+    .loading {
+      text-align: center;
+      color: #9eb0c8;
+      margin-top: 20px;
+    }
+
+    .error {
+      color: #ff6b6b;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 800px) {
+
+      .weather-main {
+        grid-template-columns: 1fr;
+      }
+
+      .airport-info {
+        grid-template-columns: 1fr;
+      }
+
+      .pin-area {
+        height: 240px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="app">
+
+    <div class="header">
+      <h1>✈️ LAX WEATHER</h1>
+      <p>Los Angeles International Airport</p>
+    </div>
+
+    <div class="location-card">
+
+      <div class="pin-area">
+
+        <div class="pin-center">
+
+          <div class="pin">
+            <div class="pin-dot"></div>
+          </div>
+
+          <div class="pin-label">
+            LAX
+          </div>
+
+          <div class="coordinates">
+            33.9416° N, 118.4085° W
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div id="loading" class="loading">
+      Loading LAX weather...
+    </div>
+
+    <div id="weather" style="display:none;">
+
+      <div class="weather-main">
+
+        <div class="current">
+
+          <div class="temperature" id="temperature">
+            --
+          </div>
+
+          <div class="condition" id="condition">
+            Loading...
+          </div>
+
+          <div class="updated" id="updated">
+            --
+          </div>
+
+        </div>
+
+
+        <div class="stats">
+
+          <div class="stat">
+            <div class="stat-title">
+              💧 HUMIDITY
+            </div>
+
+            <div class="stat-value" id="humidity">
+              --%
+            </div>
+          </div>
+
+
+          <div class="stat">
+            <div class="stat-title">
+              ☁️ CLOUD COVER
+            </div>
+
+            <div class="stat-value" id="cloud">
+              --%
+            </div>
+          </div>
+
+
+          <div class="stat">
+            <div class="stat-title">
+              🌧️ PRECIPITATION
+            </div>
+
+            <div class="stat-value" id="rain">
+              --%
+            </div>
+          </div>
+
+
+          <div class="stat">
+            <div class="stat-title">
+              💨 WIND
+            </div>
+
+            <div class="stat-value" id="wind">
+              --
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="airport-info">
+
+        <div class="info-box">
+          <strong>KLAX</strong>
+          <span>FAA / ICAO Airport Code</span>
+        </div>
+
+        <div class="info-box">
+          <strong>128 ft</strong>
+          <span>Airport elevation</span>
+        </div>
+
+        <div class="info-box">
+          <strong>~3,800 acres</strong>
+          <span>LAX airport campus</span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div id="error" class="error"></div>
+
+  </div>
+
+
+<script>
+
+const LAX_LAT = 33.9416;
+const LAX_LON = -118.4085;
+
+
+/* -------------------------
+   WEATHER CODE
+------------------------- */
+
+function weatherDescription(code) {
+
+  const descriptions = {
+
+    0: "Clear sky",
+
+    1: "Mainly clear",
+    2: "Partly cloudy",
+    3: "Overcast",
+
+    45: "Fog",
+    48: "Depositing rime fog",
+
+    51: "Light drizzle",
+    53: "Moderate drizzle",
+    55: "Dense drizzle",
+
+    61: "Slight rain",
+    63: "Moderate rain",
+    65: "Heavy rain",
+
+    71: "Slight snow",
+    73: "Moderate snow",
+    75: "Heavy snow",
+
+    80: "Slight rain showers",
+    81: "Moderate rain showers",
+    82: "Violent rain showers",
+
+    95: "Thunderstorm",
+    96: "Thunderstorm with hail",
+    99: "Thunderstorm with heavy hail"
+
+  };
+
+  return descriptions[code] || "Unknown conditions";
+}
+
+
+/* -------------------------
+   GET WEATHER
+------------------------- */
+
+async function loadWeather() {
+
+  const url =
+    `https://api.open-meteo.com/v1/forecast` +
+    `?latitude=${LAX_LAT}` +
+    `&longitude=${LAX_LON}` +
+    `&current=temperature_2m,relative_humidity_2m,precipitation,weather_code,cloud_cover,wind_speed_10m` +
+    `&hourly=precipitation_probability` +
+    `&temperature_unit=fahrenheit` +
+    `&wind_speed_unit=mph` +
+    `&timezone=America%2FLos_Angeles`;
+
+  try {
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error("Weather request failed.");
+    }
+
+    const data = await response.json();
+
+    const current = data.current;
+
+    const hourly = data.hourly;
+
+    document.getElementById("temperature").textContent =
+      Math.round(current.temperature_2m) + "°F";
+
+    document.getElementById("condition").textContent =
+      weatherDescription(current.weather_code);
+
+    document.getElementById("humidity").textContent =
+      Math.round(current.relative_humidity_2m) + "%";
+
+    document.getElementById("cloud").textContent =
+      Math.round(current.cloud_cover) + "%";
+
+    document.getElementById("rain").textContent =
+      Math.round(hourly.precipitation_probability[0]) + "%";
+
+    document.getElementById("wind").textContent =
+      Math.round(current.wind_speed_10m) + " mph";
+
+    const localTime =
+      new Date(current.time).toLocaleString(
+        "en-US",
+        {
+          timeZone: "America/Los_Angeles"
+        }
+      );
+
+    document.getElementById("updated").textContent =
+      "LAX local time: " + localTime;
+
+    document.getElementById("loading").style.display =
+      "none";
+
+    document.getElementById("weather").style.display =
+      "block";
+
+  }
+
+  catch (error) {
+
+    console.log(error);
+
+    document.getElementById("loading").style.display =
+      "none";
+
+    document.getElementById("error").textContent =
+      "Unable to load LAX weather right now.";
+
+  }
+
+}
+
+
+/* -------------------------
+   START
+------------------------- */
+
+loadWeather();
+
+
+/* -------------------------
+   AUTO REFRESH
+------------------------- */
+
+setInterval(
+  loadWeather,
+  10 * 60 * 1000
+);
+
+</script>
+
+</body>
+</html>
+```
