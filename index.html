@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,36 +17,36 @@
 
     body {
       margin: 0;
-      padding: 16px;
+      padding: 15px;
       font-family: Arial, sans-serif;
       background: #07111f;
       color: white;
     }
 
     .app {
-      width: 100%;
       max-width: 1400px;
       margin: auto;
     }
 
     .header {
       text-align: center;
-      margin-bottom: 18px;
+      margin-bottom: 20px;
     }
 
     .header h1 {
       margin: 0;
-      font-size: clamp(34px, 6vw, 64px);
+      font-size: clamp(35px, 6vw, 65px);
     }
 
     .header p {
       color: #9fb1c8;
-      margin: 8px 0 0;
+      margin-top: 8px;
+      font-size: 18px;
     }
 
     .card {
       background: #101c2c;
-      border: 1px solid #273b55;
+      border: 1px solid #293e59;
       border-radius: 20px;
       padding: 20px;
       margin-bottom: 18px;
@@ -57,7 +56,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
+      gap: 15px;
       flex-wrap: wrap;
     }
 
@@ -66,73 +65,73 @@
     }
 
     .coords {
-      color: #8fa3bc;
-      font-size: 13px;
-      margin-top: 5px;
+      color: #8fa4bd;
+      font-size: 14px;
+      margin-top: 6px;
     }
 
     .maps-button {
-      text-decoration: none;
+      display: inline-block;
       background: #2478ff;
       color: white;
-      padding: 12px 15px;
+      text-decoration: none;
+      padding: 12px 16px;
       border-radius: 12px;
       font-weight: bold;
     }
 
     #map {
+      height: 420px;
       width: 100%;
-      height: 400px;
       margin-top: 18px;
       border-radius: 16px;
       overflow: hidden;
     }
 
-    .selector-title {
+    .dropdown-title {
       margin: 0 0 10px;
     }
 
     select {
       width: 100%;
-      padding: 16px;
+      padding: 17px;
+      border-radius: 12px;
+      border: 1px solid #39516e;
       background: #0b1725;
       color: white;
-      border: 1px solid #38516e;
-      border-radius: 12px;
       font-size: 18px;
-      outline: none;
+      cursor: pointer;
     }
 
-    .forecast-main {
+    .selected-day {
       text-align: center;
-      padding-top: 10px;
     }
 
-    .selected-date {
-      color: #8fa3bc;
-      font-size: 15px;
-      margin-bottom: 8px;
+    .date {
+      color: #8fa4bd;
+      font-size: 17px;
+      margin-bottom: 10px;
     }
 
-    .forecast-icon {
-      font-size: 90px;
+    .icon {
+      font-size: 85px;
     }
 
     .condition {
       font-size: 28px;
-      margin-top: 8px;
+      margin-top: 5px;
     }
 
-    .big-temp {
-      font-size: clamp(65px, 12vw, 120px);
+    .temperature {
+      font-size: clamp(70px, 12vw, 120px);
       font-weight: bold;
       margin: 10px 0;
     }
 
     .high-low {
       font-size: 22px;
-      color: #d7e1ec;
-      margin-bottom: 20px;
+      color: #d9e3ef;
+      margin-bottom: 25px;
     }
 
     .stats {
@@ -143,36 +142,38 @@
 
     .stat {
       background: #0b1725;
-      border: 1px solid #273b55;
+      border: 1px solid #293e59;
       border-radius: 15px;
-      padding: 17px;
+      padding: 18px;
       text-align: center;
     }
 
     .stat-name {
-      color: #8fa3bc;
+      color: #91a6be;
       font-size: 13px;
     }
 
     .stat-value {
       font-size: 28px;
       font-weight: bold;
-      margin-top: 7px;
+      margin-top: 8px;
     }
 
-    .loading,
-    .error {
+    .loading {
       text-align: center;
       padding: 25px;
+      color: #9fb1c8;
     }
 
     .error {
-      color: #ff6b6b;
+      text-align: center;
+      color: #ff6d6d;
+      padding: 20px;
     }
 
     .footer {
       text-align: center;
-      color: #72869e;
+      color: #7388a0;
       font-size: 12px;
       padding: 10px 0 20px;
     }
@@ -201,537 +202,553 @@
 
 <body>
 
-  <div class="app">
+<div class="app">
 
-    <div class="header">
-      <h1>✈️ LAX WEATHER</h1>
-      <p>Los Angeles International Airport</p>
+  <div class="header">
+    <h1>✈️ LAX WEATHER</h1>
+    <p>Los Angeles International Airport</p>
+  </div>
+
+  <!-- MAP -->
+
+  <div class="card">
+
+    <div class="location-row">
+
+      <div>
+        <h2>📍 LAX Exact Location</h2>
+
+        <div class="coords">
+          33.9416° N, 118.4085° W
+        </div>
+      </div>
+
+      <a
+        class="maps-button"
+        href="https://www.google.com/maps?q=33.9416,-118.4085"
+        target="_blank"
+      >
+        🗺️ Google Maps
+      </a>
+
     </div>
 
-    <!-- MAP -->
+    <div id="map"></div>
 
-    <div class="card">
+  </div>
 
-      <div class="location-row">
-        <div>
-          <h2>📍 LAX Exact Location</h2>
-          <div class="coords">
-            33.9416° N, 118.4085° W
-          </div>
-        </div>
+  <!-- DROPDOWN -->
 
-        <a
-          class="maps-button"
-          href="https://www.google.com/maps?q=33.9416,-118.4085"
-          target="_blank"
+  <div class="card">
+
+    <h2 class="dropdown-title">
+      📅 Select Forecast Day
+    </h2>
+
+    <select id="forecastSelect">
+      <option>Loading forecast...</option>
+    </select>
+
+  </div>
+
+  <!-- SELECTED FORECAST -->
+
+  <div class="card">
+
+    <div id="loading" class="loading">
+      Loading LAX forecast...
+    </div>
+
+    <div id="forecastPanel" style="display:none;">
+
+      <div class="selected-day">
+
+        <div
+          id="selectedDate"
+          class="date"
         >
-          🗺️ Google Maps
-        </a>
-      </div>
-
-      <div id="map"></div>
-
-    </div>
-
-    <!-- DROPDOWN -->
-
-    <div class="card">
-
-      <h2 class="selector-title">
-        📅 Select Forecast Day
-      </h2>
-
-      <select id="forecastSelect">
-        <option>Loading forecast days...</option>
-      </select>
-
-    </div>
-
-    <!-- SELECTED FORECAST -->
-
-    <div class="card">
-
-      <div id="loading" class="loading">
-        Loading LAX forecast...
-      </div>
-
-      <div id="forecastPanel" style="display:none;">
-
-        <div class="forecast-main">
-
-          <div
-            id="selectedDate"
-            class="selected-date"
-          >
-            --
-          </div>
-
-          <div
-            id="forecastIcon"
-            class="forecast-icon"
-          >
-            🌤️
-          </div>
-
-          <div
-            id="forecastCondition"
-            class="condition"
-          >
-            --
-          </div>
-
-          <div
-            id="forecastTemp"
-            class="big-temp"
-          >
-            --°
-          </div>
-
-          <div class="high-low">
-            High:
-            <span id="forecastHigh">--</span>°
-            &nbsp;|&nbsp;
-            Low:
-            <span id="forecastLow">--</span>°
-          </div>
-
+          --
         </div>
 
-        <div class="stats">
+        <div
+          id="forecastIcon"
+          class="icon"
+        >
+          🌤️
+        </div>
 
-          <div class="stat">
-            <div class="stat-name">
-              🌧️ RAIN CHANCE
-            </div>
-            <div
-              class="stat-value"
-              id="forecastRain"
-            >
-              --%
-            </div>
-          </div>
+        <div
+          id="forecastCondition"
+          class="condition"
+        >
+          --
+        </div>
 
-          <div class="stat">
-            <div class="stat-name">
-              ☁️ CLOUD COVER
-            </div>
-            <div
-              class="stat-value"
-              id="forecastCloud"
-            >
-              --%
-            </div>
-          </div>
+        <div
+          id="forecastTemp"
+          class="temperature"
+        >
+          --°
+        </div>
 
-          <div class="stat">
-            <div class="stat-name">
-              💨 WIND
-            </div>
-            <div
-              class="stat-value"
-              id="forecastWind"
-            >
-              --
-            </div>
-          </div>
-
-          <div class="stat">
-            <div class="stat-name">
-              🌅 SUNRISE
-            </div>
-            <div
-              class="stat-value"
-              id="forecastSunrise"
-            >
-              --
-            </div>
-          </div>
-
+        <div class="high-low">
+          High:
+          <span id="forecastHigh">--</span>°
+          &nbsp;&nbsp;|&nbsp;&nbsp;
+          Low:
+          <span id="forecastLow">--</span>°
         </div>
 
       </div>
 
-    </div>
+      <div class="stats">
 
-    <div
-      id="error"
-      class="error"
-    ></div>
+        <div class="stat">
+          <div class="stat-name">
+            🌧️ RAIN CHANCE
+          </div>
 
-    <div class="footer">
-      LAX Weather • Forecast powered by Open-Meteo • Map © OpenStreetMap contributors
+          <div
+            id="forecastRain"
+            class="stat-value"
+          >
+            --%
+          </div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-name">
+            ☁️ CLOUD COVER
+          </div>
+
+          <div
+            id="forecastCloud"
+            class="stat-value"
+          >
+            --%
+          </div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-name">
+            💨 WIND
+          </div>
+
+          <div
+            id="forecastWind"
+            class="stat-value"
+          >
+            --
+          </div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-name">
+            🌅 SUNRISE
+          </div>
+
+          <div
+            id="forecastSunrise"
+            class="stat-value"
+          >
+            --
+          </div>
+        </div>
+
+      </div>
+
     </div>
 
   </div>
 
+  <div
+    id="error"
+    class="error"
+  ></div>
 
-  <!-- LEAFLET -->
+  <div class="footer">
+    LAX Weather • Forecast data powered by Open-Meteo
+  </div>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</div>
 
-  <script>
-    const LAX_LAT = 33.9416;
-    const LAX_LON = -118.4085;
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    let weatherData = null;
+<script>
 
-    /* -------------------------
-       MAP
-    ------------------------- */
+const LAX_LAT = 33.9416;
+const LAX_LON = -118.4085;
 
-    const map = L.map("map").setView(
-      [LAX_LAT, LAX_LON],
-      13
-    );
-
-    L.tileLayer(
-      "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-      {
-        maxZoom: 19,
-        attribution:
-          "&copy; OpenStreetMap contributors"
-      }
-    ).addTo(map);
-
-    const marker = L.marker(
-      [LAX_LAT, LAX_LON]
-    ).addTo(map);
-
-    marker.bindPopup(
-      "<b>✈️ LAX</b><br>Los Angeles International Airport<br>33.9416, -118.4085"
-    );
-
-    marker.openPopup();
+let weatherData = null;
 
 
-    /* -------------------------
-       WEATHER HELPERS
-    ------------------------- */
+/* MAP */
 
-    function weatherIcon(code) {
-      if (code === 0) return "☀️";
-      if (code === 1) return "🌤️";
-      if (code === 2) return "⛅";
-      if (code === 3) return "☁️";
-      if (code === 45 || code === 48) return "🌫️";
-      if (code >= 51 && code <= 55) return "🌦️";
-      if (code >= 61 && code <= 65) return "🌧️";
-      if (code >= 71 && code <= 75) return "❄️";
-      if (code >= 80 && code <= 82) return "🌦️";
-      if (code >= 95) return "⛈️";
-      return "🌤️";
+const map = L.map("map").setView(
+  [LAX_LAT, LAX_LON],
+  13
+);
+
+L.tileLayer(
+  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  {
+    maxZoom: 19,
+    attribution: "&copy; OpenStreetMap contributors"
+  }
+).addTo(map);
+
+const marker = L.marker(
+  [LAX_LAT, LAX_LON]
+).addTo(map);
+
+marker.bindPopup(
+  "<b>✈️ LAX</b><br>Los Angeles International Airport"
+);
+
+marker.openPopup();
+
+
+/* WEATHER ICON */
+
+function weatherIcon(code) {
+
+  if (code === 0) return "☀️";
+  if (code === 1) return "🌤️";
+  if (code === 2) return "⛅";
+  if (code === 3) return "☁️";
+
+  if (code === 45 || code === 48)
+    return "🌫️";
+
+  if (code >= 51 && code <= 55)
+    return "🌦️";
+
+  if (code >= 61 && code <= 65)
+    return "🌧️";
+
+  if (code >= 71 && code <= 75)
+    return "❄️";
+
+  if (code >= 80 && code <= 82)
+    return "🌦️";
+
+  if (code >= 95)
+    return "⛈️";
+
+  return "🌤️";
+}
+
+
+/* WEATHER DESCRIPTION */
+
+function weatherDescription(code) {
+
+  const descriptions = {
+
+    0: "Clear sky",
+    1: "Mainly clear",
+    2: "Partly cloudy",
+    3: "Overcast",
+
+    45: "Fog",
+    48: "Rime fog",
+
+    51: "Light drizzle",
+    53: "Drizzle",
+    55: "Heavy drizzle",
+
+    61: "Light rain",
+    63: "Moderate rain",
+    65: "Heavy rain",
+
+    71: "Light snow",
+    73: "Snow",
+    75: "Heavy snow",
+
+    80: "Rain showers",
+    81: "Rain showers",
+    82: "Heavy rain showers",
+
+    95: "Thunderstorm",
+    96: "Thunderstorm with hail",
+    99: "Thunderstorm with hail"
+
+  };
+
+  return descriptions[code] || "Unknown";
+}
+
+
+/* DATE */
+
+function formatDate(dateString) {
+
+  return new Date(
+    dateString + "T12:00:00"
+  ).toLocaleDateString(
+    "en-US",
+    {
+      weekday: "long",
+      month: "long",
+      day: "numeric"
+    }
+  );
+}
+
+
+/* TIME */
+
+function formatTime(isoString) {
+
+  return new Date(
+    isoString
+  ).toLocaleTimeString(
+    "en-US",
+    {
+      timeZone: "America/Los_Angeles",
+      hour: "numeric",
+      minute: "2-digit"
+    }
+  );
+}
+
+
+/* LOAD WEATHER */
+
+async function loadWeather() {
+
+  const url =
+    `https://api.open-meteo.com/v1/forecast` +
+    `?latitude=${LAX_LAT}` +
+    `&longitude=${LAX_LON}` +
+    `&daily=` +
+    `temperature_2m_max,` +
+    `temperature_2m_min,` +
+    `precipitation_probability_max,` +
+    `weather_code,` +
+    `wind_speed_10m_max,` +
+    `cloud_cover_mean,` +
+    `sunrise,` +
+    `sunset` +
+    `&temperature_unit=fahrenheit` +
+    `&wind_speed_unit=mph` +
+    `&timezone=America%2FLos_Angeles` +
+    `&forecast_days=16`;
+
+  try {
+
+    const response =
+      await fetch(url);
+
+    if (!response.ok) {
+      throw new Error("Weather request failed.");
     }
 
-    function weatherDescription(code) {
-      const descriptions = {
-        0: "Clear sky",
-        1: "Mainly clear",
-        2: "Partly cloudy",
-        3: "Overcast",
-        45: "Fog",
-        48: "Rime fog",
-        51: "Light drizzle",
-        53: "Drizzle",
-        55: "Heavy drizzle",
-        61: "Light rain",
-        63: "Moderate rain",
-        65: "Heavy rain",
-        71: "Light snow",
-        73: "Snow",
-        75: "Heavy snow",
-        80: "Rain showers",
-        81: "Rain showers",
-        82: "Heavy rain showers",
-        95: "Thunderstorm",
-        96: "Thunderstorm with hail",
-        99: "Thunderstorm with hail"
-      };
+    weatherData =
+      await response.json();
 
-      return descriptions[code] || "Unknown";
-    }
+    createDropdown();
 
-    function formatDate(dateString) {
-      return new Date(
-        dateString + "T12:00:00"
-      ).toLocaleDateString(
-        "en-US",
-        {
-          weekday: "long",
-          month: "long",
-          day: "numeric"
-        }
-      );
-    }
-
-    function formatShortDate(dateString) {
-      return new Date(
-        dateString + "T12:00:00"
-      ).toLocaleDateString(
-        "en-US",
-        {
-          month: "short",
-          day: "numeric"
-        }
-      );
-    }
-
-    function formatTime(isoString) {
-      return new Date(
-        isoString
-      ).toLocaleTimeString(
-        "en-US",
-        {
-          timeZone:
-            "America/Los_Angeles",
-          hour: "numeric",
-          minute: "2-digit"
-        }
-      );
-    }
-
-
-    /* -------------------------
-       LOAD WEATHER
-    ------------------------- */
-
-    async function loadWeather() {
-
-      const url =
-        `https://api.open-meteo.com/v1/forecast` +
-        `?latitude=${LAX_LAT}` +
-        `&longitude=${LAX_LON}` +
-        `&current=temperature_2m,relative_humidity_2m,cloud_cover,wind_speed_10m,weather_code` +
-        `&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weather_code,wind_speed_10m_max,cloud_cover_mean,sunrise,sunset` +
-        `&temperature_unit=fahrenheit` +
-        `&wind_speed_unit=mph` +
-        `&timezone=America%2FLos_Angeles` +
-        `&forecast_days=16`;
-
-      try {
-
-        const response =
-          await fetch(url);
-
-        if (!response.ok) {
-          throw new Error(
-            "Weather request failed."
-          );
-        }
-
-        weatherData =
-          await response.json();
-
-        buildDropdown();
-
-        /*
-          Default = TOMORROW
-        */
-        const tomorrowIndex = 1;
-
-        document.getElementById(
-          "forecastSelect"
-        ).value =
-          tomorrowIndex;
-
-        showForecast(
-          tomorrowIndex
-        );
-
-        document.getElementById(
-          "loading"
-        ).style.display = "none";
-
-        document.getElementById(
-          "forecastPanel"
-        ).style.display = "block";
-
-      } catch (error) {
-
-        console.error(error);
-
-        document.getElementById(
-          "loading"
-        ).style.display = "none";
-
-        document.getElementById(
-          "error"
-        ).textContent =
-          "Unable to load LAX weather right now.";
-
-      }
-    }
-
-
-    /* -------------------------
-       BUILD DROPDOWN
-    ------------------------- */
-
-    function buildDropdown() {
-
-      const select =
-        document.getElementById(
-          "forecastSelect"
-        );
-
-      select.innerHTML = "";
-
-      weatherData.daily.time.forEach(
-        (date, index) => {
-
-          const option =
-            document.createElement(
-              "option"
-            );
-
-          let label = "";
-
-          if (index === 0) {
-            label = "Today";
-          } else if (index === 1) {
-            label = "Tomorrow";
-          } else {
-            label = new Date(
-              date + "T12:00:00"
-            ).toLocaleDateString(
-              "en-US",
-              {
-                weekday: "long"
-              }
-            );
-          }
-
-          option.value = index;
-
-          option.textContent =
-            `${label} — ${formatShortDate(date)}`;
-
-          select.appendChild(
-            option
-          );
-        }
-      );
-    }
-
-
-    /* -------------------------
-       SHOW SELECTED FORECAST
-    ------------------------- */
-
-    function showForecast(index) {
-
-      index = Number(index);
-
-      const daily =
-        weatherData.daily;
-
-      document.getElementById(
-        "selectedDate"
-      ).textContent =
-        formatDate(
-          daily.time[index]
-        );
-
-      document.getElementById(
-        "forecastIcon"
-      ).textContent =
-        weatherIcon(
-          daily.weather_code[index]
-        );
-
-      document.getElementById(
-        "forecastCondition"
-      ).textContent =
-        weatherDescription(
-          daily.weather_code[index]
-        );
-
-      document.getElementById(
-        "forecastHigh"
-      ).textContent =
-        Math.round(
-          daily.temperature_2m_max[index]
-        );
-
-      document.getElementById(
-        "forecastLow"
-      ).textContent =
-        Math.round(
-          daily.temperature_2m_min[index]
-        );
-
-      document.getElementById(
-        "forecastTemp"
-      ).textContent =
-        Math.round(
-          (
-            daily.temperature_2m_max[index] +
-            daily.temperature_2m_min[index]
-          ) / 2
-        ) + "°";
-
-      document.getElementById(
-        "forecastRain"
-      ).textContent =
-        Math.round(
-          daily.precipitation_probability_max[index]
-        ) + "%";
-
-      document.getElementById(
-        "forecastCloud"
-      ).textContent =
-        Math.round(
-          daily.cloud_cover_mean[index]
-        ) + "%";
-
-      document.getElementById(
-        "forecastWind"
-      ).textContent =
-        Math.round(
-          daily.wind_speed_10m_max[index]
-        ) + " mph";
-
-      document.getElementById(
-        "forecastSunrise"
-      ).textContent =
-        formatTime(
-          daily.sunrise[index]
-        );
-    }
-
-
-    /* -------------------------
-       DROPDOWN CHANGE
-    ------------------------- */
+    /*
+      TOMORROW IS DEFAULT
+    */
 
     document.getElementById(
       "forecastSelect"
-    ).addEventListener(
-      "change",
-      function() {
-        showForecast(
-          this.value
-        );
+    ).value = "1";
+
+    showForecast(1);
+
+    document.getElementById(
+      "loading"
+    ).style.display = "none";
+
+    document.getElementById(
+      "forecastPanel"
+    ).style.display = "block";
+
+  } catch (error) {
+
+    console.error(error);
+
+    document.getElementById(
+      "loading"
+    ).style.display = "none";
+
+    document.getElementById(
+      "error"
+    ).textContent =
+      "Unable to load LAX weather.";
+
+  }
+}
+
+
+/* CREATE DROPDOWN */
+
+function createDropdown() {
+
+  const select =
+    document.getElementById(
+      "forecastSelect"
+    );
+
+  select.innerHTML = "";
+
+  weatherData.daily.time.forEach(
+    (date, index) => {
+
+      const option =
+        document.createElement("option");
+
+      let dayName;
+
+      if (index === 0) {
+
+        dayName = "Today";
+
+      } else if (index === 1) {
+
+        dayName = "Tomorrow";
+
+      } else {
+
+        dayName =
+          new Date(
+            date + "T12:00:00"
+          ).toLocaleDateString(
+            "en-US",
+            {
+              weekday: "long"
+            }
+          );
+
       }
+
+      option.value = index;
+
+      option.textContent =
+        `${dayName} — ${formatDate(date)}`;
+
+      select.appendChild(option);
+
+    }
+  );
+}
+
+
+/* SHOW FORECAST */
+
+function showForecast(index) {
+
+  index = Number(index);
+
+  const daily =
+    weatherData.daily;
+
+  document.getElementById(
+    "selectedDate"
+  ).textContent =
+    formatDate(
+      daily.time[index]
     );
 
-
-    /* -------------------------
-       START
-    ------------------------- */
-
-    loadWeather();
-
-
-    /* -------------------------
-       REFRESH EVERY 10 MINUTES
-    ------------------------- */
-
-    setInterval(
-      loadWeather,
-      10 * 60 * 1000
+  document.getElementById(
+    "forecastIcon"
+  ).textContent =
+    weatherIcon(
+      daily.weather_code[index]
     );
-  </script>
+
+  document.getElementById(
+    "forecastCondition"
+  ).textContent =
+    weatherDescription(
+      daily.weather_code[index]
+    );
+
+  const high =
+    daily.temperature_2m_max[index];
+
+  const low =
+    daily.temperature_2m_min[index];
+
+  document.getElementById(
+    "forecastHigh"
+  ).textContent =
+    Math.round(high);
+
+  document.getElementById(
+    "forecastLow"
+  ).textContent =
+    Math.round(low);
+
+  document.getElementById(
+    "forecastTemp"
+  ).textContent =
+    Math.round(
+      (high + low) / 2
+    ) + "°";
+
+  document.getElementById(
+    "forecastRain"
+  ).textContent =
+    Math.round(
+      daily.precipitation_probability_max[index]
+    ) + "%";
+
+  document.getElementById(
+    "forecastCloud"
+  ).textContent =
+    Math.round(
+      daily.cloud_cover_mean[index]
+    ) + "%";
+
+  document.getElementById(
+    "forecastWind"
+  ).textContent =
+    Math.round(
+      daily.wind_speed_10m_max[index]
+    ) + " mph";
+
+  document.getElementById(
+    "forecastSunrise"
+  ).textContent =
+    formatTime(
+      daily.sunrise[index]
+    );
+}
+
+
+/* DROPDOWN CHANGE */
+
+document.getElementById(
+  "forecastSelect"
+).addEventListener(
+  "change",
+  function() {
+
+    showForecast(
+      this.value
+    );
+
+  }
+);
+
+
+/* START */
+
+loadWeather();
+
+
+/* REFRESH */
+
+setInterval(
+  loadWeather,
+  10 * 60 * 1000
+);
+
+</script>
 
 </body>
 </html>
-```
